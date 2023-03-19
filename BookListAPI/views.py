@@ -11,7 +11,7 @@ from django.forms.models import model_to_dict
 def books_view(request):
     if request.method == 'GET':
         books = Book.objects.all().values()
-        return JsonResponse({"books": list(books)})
+        return JsonResponse({"Books": list(books)})
     else:
         if request.method == "POST":
             title = request.POST.get('title')
@@ -27,3 +27,12 @@ def books_view(request):
         except IntegrityError:
             return JsonResponse({'error':'true','message':'required field missing'},status=400)
         return JsonResponse(model_to_dict(books) and status==201)
+
+
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import api_view
+
+@api_view()
+def books(request):
+    return Response('List of books', status=status.HTTP_200_OK)
